@@ -1,10 +1,26 @@
-import React, {useContext} from 'react';
+import React, {useCallback, useContext, useRef, useState} from 'react';
+import debounce from 'lodash.debounce';
 import styles from './Search.module.scss';
 import {SearchContext} from "../../App";
 
 const Search = () => {
+    const [value, setValue] = useState('')
+    const {setSearchValue} = useContext(SearchContext);
+    const inputRef = useRef();
 
-    const {searchValue, setSearchValue} = useContext(SearchContext);
+    const onClickClear = () => {
+        setSearchValue('')
+        inputRef.current.focus();
+    }
+
+    const updateSearchValue = useCallback(
+        debounce((str)=>{setSearchValue(str)},250
+    ),[])
+
+const onChangeInput = (event)=>{
+    setValue(event.target.value)
+    updateSearchValue(event.target.value)
+}
 
     return (
         <div className={styles.root}>
@@ -17,17 +33,19 @@ const Search = () => {
                 </g>
             </svg>
             <input
+                ref={inputRef}
                 type="text"
                 placeholder='Поиск пиццы ...'
                 className={styles.input}
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+                value={value}
+                onChange={(e) => onChangeInput(e)}
             />
-            {searchValue &&(
+            {value && (
                 <svg
-                    onClick={()=>setSearchValue('')}
+                    onClick={() => onClickClear('')}
                     className={styles.clearIcon}
-                    xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" height="200" id="Layer_1" viewBox="0 0 200 200"
+                    xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" height="200" id="Layer_1"
+                    viewBox="0 0 200 200"
                     width="200"><title/>
                     <path
                         d="M114,100l49-49a9.9,9.9,0,0,0-14-14L100,86,51,37A9.9,9.9,0,0,0,37,51l49,49L37,149a9.9,9.9,0,0,0,14,14l49-49,49,49a9.9,9.9,0,0,0,14-14Z"/>

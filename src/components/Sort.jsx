@@ -1,20 +1,23 @@
 import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {setSort} from "../redux/slices/filterSlice";
 
-function Sort({value, onChangeType}) {
+const list = [
+    {name:'популярности (DESC)', sortProperty: "rating"},
+    {name:'популярности (ASK)', sortProperty: "-rating"},
+    {name:'цене (DESC)', sortProperty: "price"},
+    {name:'цене (ASK)', sortProperty: "-price"},
+    {name:'алфавиту (DESC)', sortProperty: "category"},
+    {name:'алфавиту (ASK)', sortProperty: "-category"},
+];
 
-    const list = [
-        {name:'популярности (DESC)', sortProperty: "rating"},
-        {name:'популярности (ASK)', sortProperty: "-rating"},
-        {name:'цене (DESC)', sortProperty: "price"},
-        {name:'цене (ASK)', sortProperty: "-price"},
-        {name:'алфавиту (DESC)', sortProperty: "category"},
-        {name:'алфавиту (ASK)', sortProperty: "-category"},
-    ];
-
+function Sort() {
+    const dispatch = useDispatch();
+    const sort = useSelector((state)=>state.filterSlice.sort);
     const [open, setOpen] = useState(false);
 
-    const onClickListItem =(i)=>{
-        onChangeType(i)
+    const onClickListItem =(obj)=>{
+        dispatch(setSort(obj))
         setOpen(!open)
     }
 
@@ -34,14 +37,14 @@ function Sort({value, onChangeType}) {
                 />
             </svg>
             <b>Сортировка по:</b>
-            <span onClick={()=>setOpen(!open)}>{value.name}</span>
+            <span onClick={()=>setOpen(!open)}>{sort.name}</span>
         </div>
             {open && (<div className="sort__popup">
                     <ul>
                         {list.map((obj, i) =>
                             <li
                                 key={i}
-                                className={value.sortProperty === obj.sortProperty ? "active" : ''}
+                                className={sort.sortProperty === obj.sortProperty ? "active" : ''}
                                 onClick={()=>onClickListItem(obj)}
                             >{obj.name}</li>
                         )}
