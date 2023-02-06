@@ -32,6 +32,11 @@ export const filterSlice = createSlice({
         setCurrentPage:(state, action)=>{
             state.currentPage = action.payload
         },
+        setFilters:(state, action)=>{
+            state.currentPage = Number(action.payload.currentPage);
+            state.sort.sortProperty = action.payload.sort.sortProperty;
+            state.categoryId = Number(action.payload.categoryId);
+        },
         // increment: (state) => {
         //     state.value += 1
         // },
@@ -45,6 +50,6 @@ export const filterSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setCategoryId, setSort, setCurrentPage } = filterSlice.actions;
+export const { setCategoryId, setSort, setCurrentPage, setFilters } = filterSlice.actions;
 
 export default filterSlice.reducer
