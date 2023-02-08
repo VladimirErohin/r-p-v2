@@ -1,5 +1,6 @@
 import React from 'react';
-import emptyCart from '../assets/img/empty-cart.png'
+import emptyCartImg from '../assets/img/empty-cart.png'
+import {Link} from "react-router-dom";
 
 const CartIsEmpty = () => {
     return (
@@ -10,10 +11,10 @@ const CartIsEmpty = () => {
                     Вероятней всего, вы не заказывали ещё пиццу.<br/>
                     Для того, чтобы заказать пиццу, перейди на главную страницу.
                 </p>
-                <img src={emptyCart} alt="Empty cart"/>
-                <a href="/" className="button button--black">
+                <img src={emptyCartImg} alt="Empty cart"/>
+                <Link to="/" className="button button--black">
                     <span>Вернуться назад</span>
-                </a>
+                </Link>
             </div>
         </>
     );
