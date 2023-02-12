@@ -7,7 +7,7 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 import Index from "../components/PizzaBlock";
 import Pagination from "../components/Pagination";
 import {useDispatch, useSelector} from "react-redux";
-import {selectorFilter, setCategoryId, setFilters} from "../redux/slices/filterSlice";
+import {selectorFilter, setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizzas, selectorPizzasData} from "../redux/slices/pizzasSlice";
 
 const Home = () => {
@@ -22,6 +22,10 @@ const Home = () => {
     const onClickCategory = useCallback((id) => {
         dispatch(setCategoryId(id))
     }, []);
+
+    const onChangePage =(page)=>{
+        dispatch(setCurrentPage(page))
+    }
 
     const getPizzas = async () => {
 
@@ -87,6 +91,7 @@ const Home = () => {
 
     return (
         <>
+            <div className="container">
             <div className="content__top">
                 <Category value={categoryId} onChangeCategory={(i) => onClickCategory(i)}/>
                 <Sort/>
@@ -110,7 +115,8 @@ const Home = () => {
                         </div>
                     )
             }
-            <Pagination/>
+            <Pagination currentPage={currentPage} onChangePage={onChangePage}/>
+                </div>
         </>
     );
 };
