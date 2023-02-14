@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import qs from 'qs';
 import {Link, useNavigate} from 'react-router-dom';
-import Category from "../components/Category";
+import Category from "../components/Categories";
 import Sort, {sortList} from "../components/Sort";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Index from "../components/PizzaBlock";
@@ -10,30 +10,30 @@ import {useDispatch, useSelector} from "react-redux";
 import {selectorFilter, setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
 import {fetchPizzas, selectorPizzasData} from "../redux/slices/pizzasSlice";
 
-const Home = () => {
-    const searchValue = useSelector((state) => state.filterSlice.searchValue);
+const Home: React.FC = () => {
+
     const navigate = useNavigate();
-    const {categoryId, sort, currentPage} = useSelector(selectorFilter);
+    const {categoryId, sort, currentPage, searchValue} = useSelector(selectorFilter);
     const {items, status} = useSelector(selectorPizzasData);
     const dispatch = useDispatch();
     const isSearch = useRef(false);
     const isMounted = useRef(false);
 
-    const onClickCategory = useCallback((id) => {
+    const onClickCategory = useCallback((id: number) => {
         dispatch(setCategoryId(id))
     }, []);
 
-    const onChangePage =(page)=>{
+    const onChangePage =(page:number)=>{
         dispatch(setCurrentPage(page))
     }
 
     const getPizzas = async () => {
-
         const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
         const sortBy = sort.sortProperty.replace('-', '');
         const category = categoryId > 0 ? `category=${categoryId}` : '';
         const search = searchValue ? `&search=${searchValue}` : '';
 
+        // @ts-ignore
         dispatch(fetchPizzas({
             order,
             sortBy,
@@ -80,7 +80,7 @@ const Home = () => {
         isSearch.current = false;
     }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-    const pizzas = items.map((pizza) =>
+    const pizzas = items.map((pizza:any) =>
         <Link to={`/pizza/${pizza.id}`} key={pizza.id}>
             <Index {...pizza}/>
         </Link>
@@ -93,14 +93,14 @@ const Home = () => {
         <>
             <div className="container">
             <div className="content__top">
-                <Category value={categoryId} onChangeCategory={(i) => onClickCategory(i)}/>
+                <Category value={categoryId} onChangeCategory={(i:number) => onClickCategory(i)}/>
                 <Sort/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             {
                 status === 'error' ? (
                         <div className="content__error-info">
-                            <h2>Произошла ошибка <icon>😕</icon></h2>
+                            <h2>Произошла ошибка <span>😕</span></h2>
                             <p>
                                 К сожалению не удалось получить пиццы.<br/>
                             </p>

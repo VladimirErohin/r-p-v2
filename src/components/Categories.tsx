@@ -1,16 +1,13 @@
 import React from "react";
 
-type CategoryPropsType = {
+type CategoriesPropsType = {
     value:number,
-    onChangeCategory: any
-    //onChangeCategory: (id: number)=>number
-}
+    onChangeCategory: (i: number)=>void;
+};
 
-const Category: React.FC<CategoryPropsType> = ({value, onChangeCategory}) =>{
+const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-    //type CategoriesType []
-
-    const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+const Categories: React.FC<CategoriesPropsType> = ({value, onChangeCategory}) =>{
 
     return (
         <div className="categories">
@@ -25,4 +22,4 @@ const Category: React.FC<CategoryPropsType> = ({value, onChangeCategory}) =>{
     )
 }
 
-export default Category;
+export default Categories;
