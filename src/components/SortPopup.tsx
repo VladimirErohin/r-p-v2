@@ -16,7 +16,7 @@ export const sortList: SortListType[] = [
     {name:'алфавиту (ASK)', sortProperty: "-category"},
 ];
 
-function Sort() {
+function SortPopup() {
     const dispatch = useDispatch();
     const sort = useSelector(selectorSort);
     const [open, setOpen] = useState(false);
@@ -77,4 +77,4 @@ function Sort() {
     </div>
     )
 }
-export default Sort;
+export default SortPopup;

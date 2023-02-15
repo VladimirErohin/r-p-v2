@@ -2,20 +2,26 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import qs from 'qs';
 import {Link, useNavigate} from 'react-router-dom';
 import Category from "../components/Categories";
-import Sort, {sortList} from "../components/Sort";
+import SortPopup, {sortList} from "../components/SortPopup";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Index from "../components/PizzaBlock";
 import Pagination from "../components/Pagination";
-import {useDispatch, useSelector} from "react-redux";
-import {selectorFilter, setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
+import { useSelector} from "react-redux";
+import {
+    selectorFilter,
+    setCategoryId,
+    setCurrentPage,
+    setFilters,
+} from "../redux/slices/filterSlice";
 import {fetchPizzas, selectorPizzasData} from "../redux/slices/pizzasSlice";
+import {useAppDispatch} from "../redux/store";
 
 const Home: React.FC = () => {
 
     const navigate = useNavigate();
     const {categoryId, sort, currentPage, searchValue} = useSelector(selectorFilter);
     const {items, status} = useSelector(selectorPizzasData);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const isSearch = useRef(false);
     const isMounted = useRef(false);
 
@@ -25,7 +31,7 @@ const Home: React.FC = () => {
 
     const onChangePage =(page:number)=>{
         dispatch(setCurrentPage(page))
-    }
+    };
 
     const getPizzas = async () => {
         const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
@@ -33,13 +39,12 @@ const Home: React.FC = () => {
         const category = categoryId > 0 ? `category=${categoryId}` : '';
         const search = searchValue ? `&search=${searchValue}` : '';
 
-        // @ts-ignore
         dispatch(fetchPizzas({
             order,
             sortBy,
             category,
             search,
-            currentPage
+            currentPage: String(currentPage)
         }))
     };
 
@@ -94,7 +99,7 @@ const Home: React.FC = () => {
             <div className="container">
             <div className="content__top">
                 <Category value={categoryId} onChangeCategory={(i:number) => onClickCategory(i)}/>
-                <Sort/>
+                <SortPopup/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
             {
