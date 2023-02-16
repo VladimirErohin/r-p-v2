@@ -1,19 +1,20 @@
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {addProduct, CartItemType, selectorCartItemById} from "../../redux/slices/cartSlice";
+import {Link} from "react-router-dom";
 
-type PizzaBlockTypeProps = {
-    id:string,
-    name:string,
-    price:number,
-    imageUrl:string,
-    size:Array<number>,
-    type:number[],
+export type PizzaBlockTypeProps = {
+    id: string,
+    name: string,
+    price: number,
+    imageUrl: string,
+    sizes: Array<number>,
+    types: number[],
 };
 
-const typeNames: Array<string>  = ['тонкое', 'традиционное'];
+const typeNames: Array<string> = ['тонкое', 'традиционное'];
 
-const PizzaBlock:React.FC<PizzaBlockTypeProps> = ({id, name, price, imageUrl, sizes, types}) => {
+const PizzaBlock: React.FC<PizzaBlockTypeProps> = ({id, name, price, imageUrl, sizes, types}) => {
 
     const cartItem = useSelector(selectorCartItemById(id))
 
@@ -23,14 +24,14 @@ const PizzaBlock:React.FC<PizzaBlockTypeProps> = ({id, name, price, imageUrl, si
 
     const addedItem = cartItem ? cartItem.count : 0;
 
-    const onClickAdd = ()=>{
-        let item: CartItemType ={
+    const onClickAdd = () => {
+        let item: CartItemType = {
             id,
             name,
             price,
             imageUrl,
-            type:typeNames[activeType],
-            size:sizes[activeSize],
+            type: typeNames[activeType],
+            size: sizes[activeSize],
             count: 0,
         }
         dispatch(addProduct(item));
@@ -39,24 +40,26 @@ const PizzaBlock:React.FC<PizzaBlockTypeProps> = ({id, name, price, imageUrl, si
     return (
         <div className="pizza-block-wrapper">
             <div className="pizza-block">
-                <img
-                    className="pizza-block__image"
-                    src={imageUrl}
-                    alt="Pizza"
-                />
-                <h4 className="pizza-block__title">{name}</h4>
+                <Link to={`/pizza/${id}`}>
+                    <img
+                        className="pizza-block__image"
+                        src={imageUrl}
+                        alt="Pizza"
+                    />
+                    <h4 className="pizza-block__title">{name}</h4>
+                </Link>
                 <div className="pizza-block__selector">
                     <ul>
-                        {types?.map(type =><li
-                            key = {type+1}
+                        {types?.map(type => <li
+                            key={type + 1}
                             onClick={() => setActiveType(type)}
-                            className= {activeType === type ? "active" : ""}>{typeNames[type]}
+                            className={activeType === type ? "active" : ""}>{typeNames[type]}
                         </li>)}
                     </ul>
                     <ul>
                         {sizes?.map((size, index) =>
                             <li
-                                key = {index+1}
+                                key={index + 1}
                                 onClick={() => setActiveSize(index)}
                                 className={activeSize === index ? "active" : ""}>
                                 {size} см.
@@ -65,7 +68,7 @@ const PizzaBlock:React.FC<PizzaBlockTypeProps> = ({id, name, price, imageUrl, si
                 </div>
                 <div className="pizza-block__bottom">
                     <div className="pizza-block__price">от {price} ₽</div>
-                    <div className="button button--outline button--add"  onClick={onClickAdd}>
+                    <div className="button button--outline button--add" onClick={onClickAdd}>
                         <svg
                             width="12"
                             height="12"
@@ -79,7 +82,7 @@ const PizzaBlock:React.FC<PizzaBlockTypeProps> = ({id, name, price, imageUrl, si
                             />
                         </svg>
                         <span>Добавить</span>
-                        {addedItem > 0 && <i>{addedItem}</i> }
+                        {addedItem > 0 && <i>{addedItem}</i>}
                     </div>
                 </div>
             </div>

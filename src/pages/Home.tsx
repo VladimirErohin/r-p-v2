@@ -1,19 +1,19 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import qs from 'qs';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Category from "../components/Categories";
 import SortPopup, {sortList} from "../components/SortPopup";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Index from "../components/PizzaBlock";
 import Pagination from "../components/Pagination";
-import { useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {
     selectorFilter,
     setCategoryId,
     setCurrentPage,
     setFilters,
 } from "../redux/slices/filterSlice";
-import {fetchPizzas, selectorPizzasData} from "../redux/slices/pizzasSlice";
+import {fetchPizzas, PizzaType, SearchPizzaParamsType, selectorPizzasData} from "../redux/slices/pizzasSlice";
 import {useAppDispatch} from "../redux/store";
 
 const Home: React.FC = () => {
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
         dispatch(setCategoryId(id))
     }, []);
 
-    const onChangePage =(page:number)=>{
+    const onChangePage = (page: number) => {
         dispatch(setCurrentPage(page))
     };
 
@@ -59,18 +59,28 @@ const Home: React.FC = () => {
             navigate(`?${queryString}`)
         }
         isMounted.current = true;
-    }, [categoryId, sort.sortProperty, currentPage])
+
+    }, [categoryId, sort.sortProperty, searchValue, currentPage])
 
     // Если был первый рендер, то проверяем URl-параметры и сохраняем в редуксе
     useEffect(() => {
         if (window.location.search) {
-            const params = qs.parse(window.location.search.substring(1))
-            const sort = sortList.find(obj => obj.sortProperty === params.sortProperty)
+            //const params = qs.parse(window.location.search.substring(1))
+            const params = ((qs.parse(window.location.search.substring(1))) as unknown) as SearchPizzaParamsType;
+            const sort = sortList.find(obj => obj.sortProperty === params.sortBy);
+
             dispatch(setFilters({
-                    ...params,
-                    sort
-                }
-            ))
+                searchValue: params.search,
+                categoryId: Number(params.category),
+                currentPage: Number(params.currentPage),
+                sort: sort || sortList[0],
+            }));
+            // dispatch(setFilters({
+            //         ...params,
+            //         sort
+            //     }
+            // ))
+
             isSearch.current = true;
         }
     }, [])
@@ -85,10 +95,8 @@ const Home: React.FC = () => {
         isSearch.current = false;
     }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-    const pizzas = items.map((pizza:any) =>
-        <Link to={`/pizza/${pizza.id}`} key={pizza.id}>
-            <Index {...pizza}/>
-        </Link>
+    const pizzas = items.map((pizza: PizzaType) =>
+            <Index {...pizza} key={pizza.id}/>
     );
     const skeleton = [...new Array(6)].map((_, i) => <Skeleton key={i}/>);
 
@@ -97,31 +105,31 @@ const Home: React.FC = () => {
     return (
         <>
             <div className="container">
-            <div className="content__top">
-                <Category value={categoryId} onChangeCategory={(i:number) => onClickCategory(i)}/>
-                <SortPopup/>
-            </div>
-            <h2 className="content__title">Все пиццы</h2>
-            {
-                status === 'error' ? (
-                        <div className="content__error-info">
-                            <h2>Произошла ошибка <span>😕</span></h2>
-                            <p>
-                                К сожалению не удалось получить пиццы.<br/>
-                            </p>
-                        </div>
-                    )
-                    : (
-                        <div className="content__items">
-                            {status === 'loading'
-                                ? skeleton
-                                : pizzas
-                            }
-                        </div>
-                    )
-            }
-            <Pagination currentPage={currentPage} onChangePage={onChangePage}/>
+                <div className="content__top">
+                    <Category value={categoryId} onChangeCategory={(i: number) => onClickCategory(i)}/>
+                    <SortPopup/>
                 </div>
+                <h2 className="content__title">Все пиццы</h2>
+                {
+                    status === 'error' ? (
+                            <div className="content__error-info">
+                                <h2>Произошла ошибка <span>😕</span></h2>
+                                <p>
+                                    К сожалению не удалось получить пиццы.<br/>
+                                </p>
+                            </div>
+                        )
+                        : (
+                            <div className="content__items">
+                                {status === 'loading'
+                                    ? skeleton
+                                    : pizzas
+                                }
+                            </div>
+                        )
+                }
+                <Pagination currentPage={currentPage} onChangePage={onChangePage}/>
+            </div>
         </>
     );
 };
