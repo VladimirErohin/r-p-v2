@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import logo from '../assets/img/pizza-logo.svg';
 import {Link, useLocation} from "react-router-dom";
 import Search from "./Search";
@@ -10,6 +10,17 @@ function  Header(){
     const {totalPrice, items} = useSelector(selectorCart);
     const totalCount = items.reduce((sum: number, obj: any) =>obj.count + sum, 0);
     const location = useLocation();
+    const isMounted = useRef(false);
+
+    useEffect(()=>{
+        if(isMounted.current){
+            const json = JSON.stringify(items)
+            console.log('HEADER -- ', JSON.parse(json))
+            localStorage.setItem('cart', json)
+        }
+
+        isMounted.current = true;
+        }, [items])
 
     return (
         <div className="header">
@@ -23,7 +34,7 @@ function  Header(){
                     </div>
                 </div>
             </Link>
-            <Search/>
+            {location.pathname !== '/cart' && <Search/>}
             <div className="header__cart">
                 {location.pathname !== '/cart' &&(
                     <Link to='cart' className="button button--cart">

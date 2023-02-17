@@ -14,7 +14,7 @@ body {
   border-radius: 10px;
   max-width: 1400px;
 
-  @media (max-width: 645px){
+  @media (max-width: 645px) {
     width: calc(100vw - 30px);
     margin-top: 15px;
   }
@@ -23,18 +23,18 @@ body {
 .content {
   padding: 40px 0;
 
-  &__error-info{
+  &__error-info {
     margin: 100px auto;
     width: 500px;
     text-align: center;
 
-    h2{
+    h2 {
       font-size: 32px;
       font-weight: 700;
       margin-bottom: 10px;
     }
 
-    p{
+    p {
       font-size: 20px;
     }
   }
@@ -47,10 +47,10 @@ body {
   }
 
   &__items {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      grid-column-gap: 11px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 11px;
 
     @media (max-width: 1400px) {
       grid-template-columns: repeat(3, 1fr);
@@ -71,27 +71,28 @@ body {
     justify-content: space-between;
 
     @media (max-width: 1260px) {
-      .categories{
+      .categories {
         width: 100%;
         overflow: scroll;
 
-        ul{
+        ul {
           width: 785px;
         }
       }
 
-      .sort{
+      .sort {
         padding-left: 20px;
-        b{
+
+        b {
           display: none;
         }
       }
     }
 
     @media (max-width: 760px) {
-      .categories{
-        ul{
-          li{
+      .categories {
+        ul {
+          li {
             padding: 8px 20px;
           }
         }
@@ -109,6 +110,7 @@ body {
   &--cart {
     max-width: 820px;
     margin: 90px auto;
+
     .content__title {
       margin: 0;
     }
@@ -133,6 +135,7 @@ body {
       width: 30px;
       height: 30px;
       margin-right: 10px;
+
       path {
         stroke: $black;
         stroke-width: 1.9;
@@ -165,13 +168,14 @@ body {
           stroke: darken($color: #b6b6b6, $amount: 50);
         }
       }
+
       span {
         color: darken($color: #b6b6b6, $amount: 50);
       }
     }
   }
 
-  .content__items{
+  .content__items {
     display: block;
   }
 
@@ -225,6 +229,23 @@ body {
             display: none;
           }
         }
+
+        &:disabled {
+          opacity: 0.4;
+          border-color: #787878;
+
+          &:active {
+            transform: none;
+          }
+
+          &:hover{
+            background-color: transparent;
+          }
+
+          svg path{
+            fill: #787878;
+          }
+        }
       }
 
       b {
@@ -269,6 +290,7 @@ body {
           height: 11.5px;
           position: relative;
         }
+
         &:hover,
         &:active {
           border-color: darken($color: $gray-line, $amount: 80);
@@ -326,6 +348,7 @@ body {
 
         svg {
           margin-right: 12px;
+
           path {
             fill: transparent;
             stroke-width: 2;

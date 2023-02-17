@@ -107,7 +107,7 @@ const Home: React.FC = () => {
             <div className="container">
                 <div className="content__top">
                     <Category value={categoryId} onChangeCategory={(i: number) => onClickCategory(i)}/>
-                    <SortPopup/>
+                    <SortPopup value={sort}/>
                 </div>
                 <h2 className="content__title">Все пиццы</h2>
                 {
